@@ -1,10 +1,10 @@
 import * as React from 'react';
+import clsx from 'clsx';
 
 import UnderlineLink from '@/components/links/UnderlineLink';
 import { useThemeContext } from '@/components/ThemeContext';
-import clsx from 'clsx';
 
-export default function Footer() {
+const Footer = () => {
   const { textColor, bgColor } = useThemeContext();
   return (
     <footer className={clsx('h-10 pt-2 text-center', textColor, bgColor)}>
@@ -14,4 +14,6 @@ export default function Footer() {
       </UnderlineLink>
     </footer>
   );
-}
+};
+
+export default Footer;

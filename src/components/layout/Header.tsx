@@ -3,7 +3,6 @@ import clsx from 'clsx';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
 import ThemeToggle from '@/components/ThemeToggle';
-import { themeKeys } from '@/lib/constants';
 import { useThemeContext } from '@/components/ThemeContext';
 import UnderlineLink from '@/components/links/UnderlineLink';
 
@@ -12,7 +11,7 @@ const links = [
   { href: '/profile', label: 'Profile' },
 ];
 
-export default function Header() {
+const Header = () => {
   const { textColor, bgColor } = useThemeContext();
 
   return (
@@ -34,4 +33,6 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
+
+export default Header;

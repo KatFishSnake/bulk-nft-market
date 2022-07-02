@@ -4,7 +4,7 @@ import clsxm from '@/lib/clsxm';
 
 type SkeletonProps = React.ComponentPropsWithoutRef<'div'>;
 
-export default function Skeleton({ className, ...rest }: SkeletonProps) {
+const Skeleton = ({ className, ...rest }: SkeletonProps) => {
   return (
     <div
       className={clsxm('animate-shimmer bg-[#f6f7f8]', className)}
@@ -17,4 +17,6 @@ export default function Skeleton({ className, ...rest }: SkeletonProps) {
       {...rest}
     />
   );
-}
+};
+
+export default Skeleton;

@@ -1,7 +1,7 @@
 import { themeKeys } from '@/lib/constants';
 import { useThemeContext } from '@/components/ThemeContext';
 
-export default function ThemeToggle() {
+const ThemeToggle = () => {
   const { currentTheme, toggleTheme } = useThemeContext();
 
   const handleThemeToggle = () => {
@@ -39,4 +39,6 @@ export default function ThemeToggle() {
       )}
     </button>
   );
-}
+};
+
+export default ThemeToggle;
