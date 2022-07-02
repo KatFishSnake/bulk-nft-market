@@ -1,12 +1,12 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { openGraph } from '../lib/helper';
 
 const defaultMeta = {
   title: 'BNFT: Bulk NFT marketplace',
   siteName: 'BNFT: Bulk NFT marketplace',
   description: 'Buy NFTs in bulk',
-  // !STARTERCONF Update url
-  url: 'localhost:3000',
+  url: 'https://bulk-nft-market-ehyzkjtb0-katfishsnake.vercel.app',
   type: 'website',
   robots: 'follow, index',
   /**
@@ -33,13 +33,11 @@ export default function Seo(props: SeoProps) {
 
   // Use siteName if there is templateTitle
   // but show full title if there is none
-  // !STARTERCONF Follow config for opengraph, by deploying one on https://github.com/theodorusclarence/og
-  // ? Uncomment code below if you want to use default open graph
-  // meta['image'] = openGraph({
-  //   description: meta.description,
-  //   siteName: props.templateTitle ? meta.siteName : meta.title,
-  //   templateTitle: props.templateTitle,
-  // });
+  meta['image'] = openGraph({
+    description: meta.description,
+    siteName: props.templateTitle ? meta.siteName : meta.title,
+    templateTitle: props.templateTitle,
+  });
 
   return (
     <Head>

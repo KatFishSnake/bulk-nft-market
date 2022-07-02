@@ -1,29 +1,35 @@
 import * as React from 'react';
+import clsx from 'clsx';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
+import ThemeToggle from '@/components/ThemeToggle';
+import { themeKeys } from '@/lib/constants';
+import { useThemeContext } from '@/components/ThemeContext';
+import UnderlineLink from '@/components/links/UnderlineLink';
 
 const links = [
-  { href: '/', label: 'Route 1' },
-  { href: '/', label: 'Route 2' },
+  { href: '/components', label: 'Components' },
+  { href: '/profile', label: 'Profile' },
 ];
 
 export default function Header() {
+  const { textColor, bgColor } = useThemeContext();
+
   return (
-    <header className='sticky top-0 z-50 bg-white'>
+    <header className={clsx('sticky top-0 z-50', bgColor, textColor)}>
       <div className='layout flex h-14 items-center justify-between'>
-        <UnstyledLink href='/' className='font-bold hover:text-gray-600'>
-          Home
+        <UnstyledLink href='/' className='flex items-center font-bold'>
+          <span className='pr-2 text-2xl'>🍱</span>BNFT Marketplace
         </UnstyledLink>
-        <nav>
+        <nav className='flex'>
           <ul className='flex items-center justify-between space-x-4'>
             {links.map(({ href, label }) => (
               <li key={`${href}${label}`}>
-                <UnstyledLink href={href} className='hover:text-gray-600'>
-                  {label}
-                </UnstyledLink>
+                <UnderlineLink href={href}>{label}</UnderlineLink>
               </li>
             ))}
           </ul>
+          <ThemeToggle />
         </nav>
       </div>
     </header>

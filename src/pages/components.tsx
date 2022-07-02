@@ -1,4 +1,3 @@
-// !STARTERCONF You can delete this page
 import clsx from 'clsx';
 import * as React from 'react';
 
@@ -12,17 +11,17 @@ import UnstyledLink from '@/components/links/UnstyledLink';
 import NextImage from '@/components/NextImage';
 import Seo from '@/components/Seo';
 import Skeleton from '@/components/Skeleton';
-
-type Color = typeof colorList[number];
+import { useThemeContext } from '@/components/ThemeContext';
+import { themeKeys } from '@/lib/constants';
 
 export default function ComponentsPage() {
-  const [mode, setMode] = React.useState<'dark' | 'light'>('light');
-  const [color, setColor] = React.useState<Color>('sky');
-  function toggleMode() {
-    return mode === 'dark' ? setMode('light') : setMode('dark');
-  }
+  const { currentTheme, toggleTheme } = useThemeContext();
+  const toggleMode = () => {
+    toggleTheme();
+  };
 
-  const textColor = mode === 'dark' ? 'text-gray-300' : 'text-gray-600';
+  const textColor =
+    currentTheme === themeKeys.dark ? 'text-gray-300' : 'text-gray-600';
 
   return (
     <Layout>
@@ -33,12 +32,15 @@ export default function ComponentsPage() {
 
       <main>
         <section
-          className={clsx(mode === 'dark' ? 'bg-dark' : 'bg-gray-50', color)}
+          className={clsx(
+            currentTheme === themeKeys.dark ? 'bg-dark' : 'bg-gray-50',
+            textColor
+          )}
         >
           <div
             className={clsx(
               'layout min-h-screen py-20',
-              mode === 'dark' ? 'text-white' : 'text-black'
+              currentTheme === themeKeys.dark ? 'text-white' : 'text-black'
             )}
           >
             <h1>Built-in Components</h1>
@@ -49,9 +51,9 @@ export default function ComponentsPage() {
             <div className='mt-8 flex flex-wrap gap-2'>
               <Button
                 onClick={toggleMode}
-                variant={mode === 'dark' ? 'light' : 'dark'}
+                variant={currentTheme === themeKeys.dark ? 'light' : 'dark'}
               >
-                Set to {mode === 'dark' ? 'light' : 'dark'}
+                Set to {currentTheme === themeKeys.dark ? 'light' : 'dark'}
               </Button>
               {/* <Button onClick={randomize}>Randomize CSS Variable</Button> */}
             </div>
@@ -63,30 +65,6 @@ export default function ComponentsPage() {
                   You can change primary color to any Tailwind CSS colors. See
                   globals.css to change your color.
                 </p>
-                <div className='flex flex-wrap gap-2'>
-                  <select
-                    name='color'
-                    id='color'
-                    value={color}
-                    className={clsx(
-                      'block max-w-xs rounded',
-                      mode === 'dark'
-                        ? 'border border-gray-600 bg-dark'
-                        : 'border-gray-300 bg-white',
-                      'focus:border-primary-400 focus:outline-none focus:ring focus:ring-primary-400'
-                    )}
-                    onChange={(e) => setColor(e.target.value as Color)}
-                  >
-                    {colorList.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                  <ButtonLink href='https://github.com/theodorusclarence/ts-nextjs-tailwind-starter/blob/main/src/styles/colors.css'>
-                    Check list of colors
-                  </ButtonLink>
-                </div>
                 <div className='flex flex-wrap gap-2 text-xs font-medium'>
                   <div className='flex h-10 w-10 items-center justify-center rounded bg-primary-50 text-black'>
                     50
@@ -201,14 +179,14 @@ export default function ComponentsPage() {
                   </ButtonLink>
                   <ButtonLink
                     variant='outline'
-                    isDarkBg={mode === 'dark'}
+                    isDarkBg={currentTheme === themeKeys.dark}
                     href='https://theodorusclarence.com'
                   >
                     Outline Variant
                   </ButtonLink>
                   <ButtonLink
                     variant='ghost'
-                    isDarkBg={mode === 'dark'}
+                    isDarkBg={currentTheme === themeKeys.dark}
                     href='https://theodorusclarence.com'
                   >
                     Ghost Variant
@@ -234,10 +212,16 @@ export default function ComponentsPage() {
                 </p>
                 <div className='flex flex-wrap gap-2'>
                   <Button variant='primary'>Primary Variant</Button>
-                  <Button variant='outline' isDarkBg={mode === 'dark'}>
+                  <Button
+                    variant='outline'
+                    isDarkBg={currentTheme === themeKeys.dark}
+                  >
                     Outline Variant
                   </Button>
-                  <Button variant='ghost' isDarkBg={mode === 'dark'}>
+                  <Button
+                    variant='ghost'
+                    isDarkBg={currentTheme === themeKeys.dark}
+                  >
                     Ghost Variant
                   </Button>
                   <Button variant='dark'>Dark Variant</Button>
@@ -247,10 +231,18 @@ export default function ComponentsPage() {
                   <Button disabled variant='primary'>
                     Disabled
                   </Button>
-                  <Button disabled variant='outline' isDarkBg={mode === 'dark'}>
+                  <Button
+                    disabled
+                    variant='outline'
+                    isDarkBg={currentTheme === themeKeys.dark}
+                  >
                     Disabled
                   </Button>
-                  <Button disabled variant='ghost' isDarkBg={mode === 'dark'}>
+                  <Button
+                    disabled
+                    variant='ghost'
+                    isDarkBg={currentTheme === themeKeys.dark}
+                  >
                     Disabled
                   </Button>
                   <Button disabled variant='dark'>
@@ -267,11 +259,15 @@ export default function ComponentsPage() {
                   <Button
                     isLoading
                     variant='outline'
-                    isDarkBg={mode === 'dark'}
+                    isDarkBg={currentTheme === themeKeys.dark}
                   >
                     Disabled
                   </Button>
-                  <Button isLoading variant='ghost' isDarkBg={mode === 'dark'}>
+                  <Button
+                    isLoading
+                    variant='ghost'
+                    isDarkBg={currentTheme === themeKeys.dark}
+                  >
                     Disabled
                   </Button>
                   <Button isLoading variant='dark'>
