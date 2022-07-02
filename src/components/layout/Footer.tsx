@@ -1,5 +1,5 @@
-import * as React from 'react';
 import clsx from 'clsx';
+import * as React from 'react';
 
 import UnderlineLink from '@/components/links/UnderlineLink';
 import { useThemeContext } from '@/components/ThemeContext';

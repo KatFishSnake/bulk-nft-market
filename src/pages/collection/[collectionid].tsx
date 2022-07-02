@@ -1,14 +1,16 @@
+import clsx from 'clsx';
+import type { GetServerSidePropsContext } from 'next';
 import * as React from 'react';
 import { BiArrowBack } from 'react-icons/bi';
-import type { GetServerSidePropsContext } from 'next';
+
+import { CollectionType } from '@/lib/types';
 
 import Layout from '@/components/layout/Layout';
-import Seo from '@/components/Seo';
-import { CollectionType } from '@/lib/types';
-import { useThemeContext } from '@/components/ThemeContext';
-import clsx from 'clsx';
-import Tokens from '@/components/Tokens';
 import UnstyledLink from '@/components/links/UnstyledLink';
+import NextImage from '@/components/NextImage';
+import Seo from '@/components/Seo';
+import { useThemeContext } from '@/components/ThemeContext';
+import Tokens from '@/components/Tokens';
 
 type PropsType = {
   collection: CollectionType;
@@ -31,8 +33,29 @@ const CollectionPage = ({
             Back to collections
           </UnstyledLink>
         </div>
-        <div className='container mx-auto pt-5'>{collection.name}</div>
-        <Tokens collectionContractAddress={collectionContractAddress} />
+        <div className='container mx-auto flex flex-row pt-5'>
+          {collection.banner_image_url?.length ? (
+            <NextImage
+              src={collection.banner_image_url || ''}
+              className='w-24'
+              alt={`${collection.name} collection thumbnail picture`}
+              width={200}
+              height={200}
+              layout='responsive'
+              objectFit='cover'
+            />
+          ) : null}
+          <div className='ml-4 flex items-center'>
+            <h1>{collection.name || 'Ghost collection'}</h1>
+          </div>
+        </div>
+        {collectionContractAddress ? (
+          <Tokens collectionContractAddress={collectionContractAddress} />
+        ) : (
+          <div className='container mx-auto pt-5'>
+            <p>Collection has no tokens</p>
+          </div>
+        )}
       </main>
     </Layout>
   );
@@ -57,9 +80,10 @@ export const getServerSideProps = async ({
 
   return {
     props: {
-      collection: responseCollection,
+      collection: responseCollection?.collection,
       collectionContractAddress:
-        responseCollection?.collection?.primary_asset_contracts?.[0]?.address,
+        responseCollection?.collection?.primary_asset_contracts?.[0]?.address ||
+        null,
     },
   };
 };

@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
+import React, { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
 
-import type { TokenType } from '@/lib/types';
-import { useThemeContext } from '@/components/ThemeContext';
-import fetcher from '@/lib/fetcher';
-import Image from 'next/image';
-import SearchInput from '@/components/SearchInput';
 import { themeKeys } from '@/lib/constants';
+import fetcher from '@/lib/fetcher';
+import type { TokenType } from '@/lib/types';
+
 import UnderlineLink from '@/components/links/UnderlineLink';
+import SearchInput from '@/components/SearchInput';
+import { useThemeContext } from '@/components/ThemeContext';
 
 type PropsType = {
   collectionContractAddress: string;

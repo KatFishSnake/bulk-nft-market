@@ -1,5 +1,6 @@
-import { useThemeContext } from '@/components/ThemeContext';
 import React, { useDeferredValue, useEffect, useState } from 'react';
+
+import { useThemeContext } from '@/components/ThemeContext';
 
 type PropsType = {
   onSearchChange: (query: string) => void;

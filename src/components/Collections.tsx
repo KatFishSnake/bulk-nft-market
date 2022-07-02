@@ -1,14 +1,15 @@
 import clsx from 'clsx';
-import React, { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
+import React, { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
 
-import type { CollectionType } from '@/lib/types';
-import { useThemeContext } from '@/components/ThemeContext';
-import fetcher from '@/lib/fetcher';
-import Image from 'next/image';
-import SearchInput from '@/components/SearchInput';
-import UnstyledLink from '@/components/links/UnstyledLink';
 import { themeKeys } from '@/lib/constants';
+import fetcher from '@/lib/fetcher';
+import type { CollectionType } from '@/lib/types';
+
+import UnstyledLink from '@/components/links/UnstyledLink';
+import SearchInput from '@/components/SearchInput';
+import { useThemeContext } from '@/components/ThemeContext';
 
 type CollectionsResponseType = {
   collections: Array<CollectionType>;
@@ -61,7 +62,7 @@ const Collections = () => {
       <div className='container mx-auto grid grid-cols-1 gap-4 pt-10 pb-10 md:grid-cols-3 xl:grid-cols-4'>
         {collections?.length ? (
           collections.map(
-            ({ slug, name, short_description, banner_image_url, stats }) => (
+            ({ slug, name, short_description, banner_image_url }) => (
               <UnstyledLink
                 key={slug}
                 href={`/collection/${slug}`}

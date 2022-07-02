@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+
 import { openGraph } from '../lib/helper';
 
 const defaultMeta = {

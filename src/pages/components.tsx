@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import * as React from 'react';
 
+import { themeKeys } from '@/lib/constants';
+
 import Button from '@/components/Button';
 import Layout from '@/components/layout/Layout';
 import ArrowLink from '@/components/links/ArrowLink';
@@ -12,7 +14,6 @@ import NextImage from '@/components/NextImage';
 import Seo from '@/components/Seo';
 import Skeleton from '@/components/Skeleton';
 import { useThemeContext } from '@/components/ThemeContext';
-import { themeKeys } from '@/lib/constants';
 
 export default function ComponentsPage() {
   const { currentTheme, toggleTheme } = useThemeContext();

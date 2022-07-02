@@ -1,10 +1,10 @@
-import * as React from 'react';
 import clsx from 'clsx';
+import * as React from 'react';
 
-import UnstyledLink from '@/components/links/UnstyledLink';
-import ThemeToggle from '@/components/ThemeToggle';
-import { useThemeContext } from '@/components/ThemeContext';
 import UnderlineLink from '@/components/links/UnderlineLink';
+import UnstyledLink from '@/components/links/UnstyledLink';
+import { useThemeContext } from '@/components/ThemeContext';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const links = [
   { href: '/components', label: 'Components' },
