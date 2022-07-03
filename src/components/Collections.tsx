@@ -52,14 +52,13 @@ const Collections = () => {
   );
 
   if (error) return <div>Failed to load</div>;
-  if (!collections) return <div>Loading...</div>;
 
   return (
     <main className={clsx(textColor, bgColor, 'grow')}>
-      <div className='container mx-auto pt-5'>
+      <div className='layout pt-5'>
         <SearchInput onSearchChange={handleOnSearchChange} />
       </div>
-      <div className='container mx-auto grid grid-cols-1 gap-4 pt-10 pb-10 md:grid-cols-3 xl:grid-cols-4'>
+      <div className='layout grid grid-cols-1 gap-4 pt-5 pb-10 md:grid-cols-3 xl:grid-cols-4'>
         {collections?.length ? (
           collections.map(
             ({ slug, name, short_description, banner_image_url }) => (
@@ -103,7 +102,7 @@ const Collections = () => {
             )
           )
         ) : (
-          <p>No collections</p>
+          <p>Loading...</p>
         )}
       </div>
     </main>

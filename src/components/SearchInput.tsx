@@ -40,7 +40,7 @@ const SearchInput = ({ onSearchChange }: PropsType) => {
         </div>
         <input
           type='search'
-          className={`block w-full rounded-lg border border-gray-300 ${bgColor} p-4 pl-10 text-sm ${textColor} focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600`}
+          className={`block w-full rounded-lg border border-gray-300 ${bgColor} py-2 px-4 pl-10 text-sm ${textColor} focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600`}
           placeholder='Search Collections...'
           onChange={handleSearch}
           required

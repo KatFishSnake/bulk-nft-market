@@ -4,6 +4,8 @@ module.exports = {
     dirs: ['src'],
   },
 
+  swcMinify: true,
+
   reactStrictMode: true,
 
   images: {

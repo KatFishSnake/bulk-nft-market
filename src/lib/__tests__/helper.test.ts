@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { openGraph } from '@/lib/helper';
 
 describe('Open Graph function should work correctly', () => {

@@ -4,6 +4,8 @@ const { fontFamily } = require('tailwindcss/defaultTheme');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
+  // TODO questionable way to fix overwriting side panel styles this should be resolved
+  important: true,
   theme: {
     extend: {
       fontFamily: {

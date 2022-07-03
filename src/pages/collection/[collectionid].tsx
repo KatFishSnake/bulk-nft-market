@@ -27,13 +27,13 @@ const CollectionPage = ({
       <Seo templateTitle='Token' description='Individual token page' />
 
       <main className={clsx(textColor, bgColor, 'grow')}>
-        <div className='container mx-auto pt-5'>
+        <div className='layout pt-5'>
           <UnstyledLink href='/' className='flex items-center font-bold'>
             <BiArrowBack className='pr-2 text-2xl' />
             Back to collections
           </UnstyledLink>
         </div>
-        <div className='container mx-auto flex flex-row pt-5'>
+        <div className='layout flex flex-row pt-5'>
           {collection.banner_image_url?.length ? (
             <NextImage
               src={collection.banner_image_url || ''}
@@ -52,7 +52,7 @@ const CollectionPage = ({
         {collectionContractAddress ? (
           <Tokens collectionContractAddress={collectionContractAddress} />
         ) : (
-          <div className='container mx-auto pt-5'>
+          <div className='layout pt-5'>
             <p>Collection has no tokens</p>
           </div>
         )}

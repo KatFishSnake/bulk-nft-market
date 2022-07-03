@@ -4,6 +4,7 @@ import useSWR from 'swr';
 
 import { themeKeys } from '@/lib/constants';
 import fetcher from '@/lib/fetcher';
+import { StateType, useStore } from '@/lib/store';
 import type { TokenType } from '@/lib/types';
 
 import UnderlineLink from '@/components/links/UnderlineLink';
@@ -21,6 +22,7 @@ type TokensResponseType = {
 const defaultTokenName = 'Ghost';
 
 const Tokens = ({ collectionContractAddress }: PropsType) => {
+  const { toggleToken }: Partial<StateType> = useStore();
   const { bgColor, currentTheme } = useThemeContext();
   const [tokens, setTokens] = useState<Array<TokenType>>([]);
 
@@ -60,20 +62,22 @@ const Tokens = ({ collectionContractAddress }: PropsType) => {
 
   return (
     <section>
-      <div className='container mx-auto pt-5'>
+      <div className='layout pt-5'>
         <SearchInput onSearchChange={handleOnSearchChange} />
       </div>
-      <div className='container mx-auto grid grid-cols-1 gap-4 pt-10 pb-10 md:grid-cols-3 xl:grid-cols-4'>
+      <div className='layout grid grid-cols-1 gap-4 pt-5 pb-10 md:grid-cols-3 xl:grid-cols-4'>
         {tokens.length
-          ? tokens.map(
-              ({
+          ? tokens.map((token) => {
+              const {
                 id,
                 name,
                 description,
                 image_thumbnail_url,
                 image_url,
                 permalink,
-              }) => (
+                asset_contract,
+              } = token;
+              return (
                 <div
                   key={id}
                   className={`flex cursor-pointer flex-col rounded-lg border ${bgColor} bg-white shadow-md ${
@@ -81,6 +85,9 @@ const Tokens = ({ collectionContractAddress }: PropsType) => {
                       ? 'dark:hover:bg-gray-700'
                       : 'hover:bg-gray-100'
                   }  dark:border-gray-700  `}
+                  onClick={() => {
+                    toggleToken?.(token);
+                  }}
                 >
                   {image_thumbnail_url || image_url ? (
                     <div className='relative h-24 w-full rounded-t-lg md:h-48'>
@@ -113,8 +120,8 @@ const Tokens = ({ collectionContractAddress }: PropsType) => {
                     </p>
                   </div>
                 </div>
-              )
-            )
+              );
+            })
           : 'No tokens found'}
       </div>
     </section>

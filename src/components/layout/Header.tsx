@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import * as React from 'react';
 
+import { StateType, useStore } from '@/lib/store';
+
 import UnderlineLink from '@/components/links/UnderlineLink';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import { useThemeContext } from '@/components/ThemeContext';
@@ -13,6 +15,14 @@ const links = [
 
 const Header = () => {
   const { textColor, bgColor } = useThemeContext();
+  const { openCartPanel, tokens: selectedTokens }: Partial<StateType> =
+    useStore();
+
+  const handleOpenCartPanel = () => {
+    openCartPanel?.();
+  };
+
+  const numberOfTokensSelected = selectedTokens?.length || 0;
 
   return (
     <header className={clsx('sticky top-0 z-50', bgColor, textColor)}>
@@ -27,6 +37,12 @@ const Header = () => {
                 <UnderlineLink href={href}>{label}</UnderlineLink>
               </li>
             ))}
+            <li key='open-cart-panel' onClick={handleOpenCartPanel}>
+              <span className='cursor-pointer hover:underline'>
+                Cart
+                {numberOfTokensSelected ? `(${numberOfTokensSelected})` : null}
+              </span>
+            </li>
           </ul>
           <ThemeToggle />
         </nav>
