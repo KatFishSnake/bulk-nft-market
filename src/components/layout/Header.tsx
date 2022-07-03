@@ -1,12 +1,13 @@
 import clsx from 'clsx';
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 
 import { StateType, useStore } from '@/lib/store';
 
 import UnderlineLink from '@/components/links/UnderlineLink';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import { useThemeContext } from '@/components/ThemeContext';
-import ThemeToggle from '@/components/ThemeToggle';
+
+import ThemeToggle from './ThemeToggle';
 
 const links = [
   { href: '/components', label: 'Components' },
@@ -14,6 +15,8 @@ const links = [
 ];
 
 const Header = () => {
+  const [localNumberOfSelectedTokens, setLocalNumberOfSelectedTokens] =
+    useState(0);
   const { textColor, bgColor } = useThemeContext();
   const { openCartPanel, tokens: selectedTokens }: Partial<StateType> =
     useStore();
@@ -22,7 +25,10 @@ const Header = () => {
     openCartPanel?.();
   };
 
-  const numberOfTokensSelected = selectedTokens?.length || 0;
+  // ? TODO: is there a better way todo this otherwise next complains about after hydration UI mismatch
+  useEffect(() => {
+    setLocalNumberOfSelectedTokens(selectedTokens?.length || 0);
+  }, [selectedTokens?.length]);
 
   return (
     <header className={clsx('sticky top-0 z-50', bgColor, textColor)}>
@@ -40,7 +46,9 @@ const Header = () => {
             <li key='open-cart-panel' onClick={handleOpenCartPanel}>
               <span className='cursor-pointer hover:underline'>
                 Cart
-                {numberOfTokensSelected ? `(${numberOfTokensSelected})` : null}
+                {localNumberOfSelectedTokens
+                  ? `(${localNumberOfSelectedTokens})`
+                  : null}
               </span>
             </li>
           </ul>

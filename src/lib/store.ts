@@ -1,8 +1,16 @@
 import { useLayoutEffect } from 'react';
 import create, { UseBoundStore } from 'zustand';
 import createContext from 'zustand/context';
+import { persist } from 'zustand/middleware';
 
 import type { TokenType } from '@/lib/types';
+
+// Questionable workaround for Zustand persistence for SSR
+const dummyStorageApi = {
+  getItem: () => null,
+  setItem: () => undefined,
+  removeItem: () => undefined,
+};
 
 export type StateType = ReturnType<typeof getDefaultInitialState>;
 type UseStoreStateType = typeof initializeStore extends (
@@ -27,52 +35,65 @@ const getDefaultInitialState = () => ({
 });
 
 export const initializeStore = (preloadedState = {}) =>
-  create((set, get) => ({
-    ...getDefaultInitialState(),
-    ...preloadedState,
+  create(
+    persist(
+      (set, get) => ({
+        ...getDefaultInitialState(),
+        ...preloadedState,
 
-    addToken: (token: TokenType) => {
-      const currentState = get() as StateType;
-      if (alreadyHasToken(token.id, currentState.tokens)) {
-        return;
+        addToken: (token: TokenType) => {
+          const currentState = get() as StateType;
+          if (alreadyHasToken(token.id, currentState.tokens)) {
+            return;
+          }
+
+          set((state: StateType) => ({
+            ...state,
+            tokens: [...state.tokens, token],
+          }));
+        },
+
+        removeToken: (tokenId: string) => {
+          set((state: StateType) => ({
+            ...state,
+            tokens: state.tokens.filter(
+              (token: TokenType) => token.id !== tokenId
+            ),
+          }));
+        },
+
+        toggleToken: (token: TokenType) => {
+          const currentState = get() as StateType;
+
+          if (alreadyHasToken(token.id, currentState.tokens)) {
+            currentState.removeToken(token.id);
+          } else {
+            currentState.addToken(token);
+          }
+        },
+
+        openCartPanel: () => {
+          set({ isCartPanelOpen: true });
+        },
+        closeCartPanel: () => {
+          set({ isCartPanelOpen: false });
+        },
+
+        resetCart: () => {
+          set({
+            tokens: [getDefaultInitialState().tokens],
+          });
+        },
+      }),
+
+      // TODO should really split this onto 2 stores, and persist only the selected tokens
+      {
+        name: 'ui-store', // unique name
+        getStorage: () =>
+          typeof window !== 'undefined' ? window.localStorage : dummyStorageApi,
       }
-
-      set((state: StateType) => ({
-        ...state,
-        tokens: [...state.tokens, token],
-      }));
-    },
-
-    removeToken: (tokenId: string) => {
-      set((state: StateType) => ({
-        ...state,
-        tokens: state.tokens.filter((token: TokenType) => token.id !== tokenId),
-      }));
-    },
-
-    toggleToken: (token: TokenType) => {
-      const currentState = get() as StateType;
-
-      if (alreadyHasToken(token.id, currentState.tokens)) {
-        currentState.removeToken(token.id);
-      } else {
-        currentState.addToken(token);
-      }
-    },
-
-    openCartPanel: () => {
-      set({ isCartPanelOpen: true });
-    },
-    closeCartPanel: () => {
-      set({ isCartPanelOpen: false });
-    },
-
-    resetCart: () => {
-      set({
-        tokens: [getDefaultInitialState().tokens],
-      });
-    },
-  }));
+    )
+  );
 
 let store: any;
 export const useCreateStore = (serverInitialState: StateType) => {

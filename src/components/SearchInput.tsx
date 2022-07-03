@@ -1,4 +1,9 @@
-import React, { useDeferredValue, useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useState,
+} from 'react';
 
 import { useThemeContext } from '@/components/ThemeContext';
 
@@ -15,12 +20,18 @@ const SearchInput = ({ onSearchChange }: PropsType) => {
     setQuery(e.target.value);
   };
 
+  // * Autofocus input element via useCallback, interesting ...
+  // Probably not going to use this extensively with the production code, ref + effect seems to be more syntactically sound
+  const inputEl = useCallback((inputElement: HTMLInputElement) => {
+    if (inputElement) inputElement.focus();
+  }, []);
+
   useEffect(() => {
     onSearchChange(deferredQueryValue || '');
   }, [deferredQueryValue]);
 
   return (
-    <form>
+    <form className='max-w-md'>
       <div className='relative'>
         <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
           <svg
@@ -40,10 +51,12 @@ const SearchInput = ({ onSearchChange }: PropsType) => {
         </div>
         <input
           type='search'
+          ref={inputEl}
           className={`block w-full rounded-lg border border-gray-300 ${bgColor} py-2 px-4 pl-10 text-sm ${textColor} focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600`}
           placeholder='Search Collections...'
           onChange={handleSearch}
           required
+          autoFocus
         />
       </div>
     </form>

@@ -3,7 +3,8 @@ import type { GetServerSidePropsContext } from 'next';
 import * as React from 'react';
 import { BiArrowBack } from 'react-icons/bi';
 
-import { CollectionType } from '@/lib/types';
+import { getSiteUrl } from '@/lib/helper';
+import type { CollectionType } from '@/lib/types';
 
 import Layout from '@/components/layout/Layout';
 import UnstyledLink from '@/components/links/UnstyledLink';
@@ -71,11 +72,10 @@ export const getServerSideProps = async ({
   );
 
   // TODO This is not good, need to probably preserve the collection from the parent route or combine the fetches
+  // ! Additionally need to improve error states, investigate how next recommends to do this
 
   const responseCollection: { collection: CollectionType } = await (
-    await fetch(
-      `https://testnets-api.opensea.io/api/v1/collection/${params?.collectionid}`
-    )
+    await fetch(`${getSiteUrl()}/api/collection/${params?.collection_id}`)
   ).json();
 
   return {

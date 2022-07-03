@@ -1,15 +1,12 @@
-import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
 
-import { themeKeys } from '@/lib/constants';
 import fetcher from '@/lib/fetcher';
-import { StateType, useStore } from '@/lib/store';
+import { sortListBy } from '@/lib/helper';
 import type { TokenType } from '@/lib/types';
 
-import UnderlineLink from '@/components/links/UnderlineLink';
 import SearchInput from '@/components/SearchInput';
-import { useThemeContext } from '@/components/ThemeContext';
+import TokenCard from '@/components/TokenCard';
 
 type PropsType = {
   collectionContractAddress: string;
@@ -19,33 +16,25 @@ type TokensResponseType = {
   assets: Array<TokenType>;
 };
 
-const defaultTokenName = 'Ghost';
-
 const Tokens = ({ collectionContractAddress }: PropsType) => {
-  const { toggleToken }: Partial<StateType> = useStore();
-  const { bgColor, currentTheme } = useThemeContext();
   const [tokens, setTokens] = useState<Array<TokenType>>([]);
 
   // TODO loads only 50 items, add pagination
   const { data, error } = useSWR<TokensResponseType>(
-    `https://testnets-api.opensea.io/api/v1/assets?asset_contract_address=${collectionContractAddress}&order_direction=desc&offset=0&limit=50&include_orders=false`,
+    `/api/collection-assets/${collectionContractAddress}?limit=50&order=desc`,
     fetcher
   );
 
   useEffect(() => {
     if (data?.assets) {
-      setTokens(
-        [...data.assets].sort((a, b) =>
-          (a?.name || '').localeCompare(b?.name || '')
-        )
-      );
+      setTokens(sortListBy(data.assets, 'name'));
     }
   }, [data?.assets]);
 
   const handleOnSearchChange = useCallback(
     (value: string) => {
       if (value === '') {
-        setTokens(data?.assets || []);
+        setTokens(sortListBy(data?.assets, 'name'));
         return;
       }
       setTokens(
@@ -65,63 +54,12 @@ const Tokens = ({ collectionContractAddress }: PropsType) => {
       <div className='layout pt-5'>
         <SearchInput onSearchChange={handleOnSearchChange} />
       </div>
-      <div className='layout grid grid-cols-1 gap-4 pt-5 pb-10 md:grid-cols-3 xl:grid-cols-4'>
+      <div className='layout pt-5 text-gray-500'>
+        <p>Click on a token to add it to your cart</p>
+      </div>
+      <div className='layout grid grid-cols-1 gap-4 pt-5 pb-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4'>
         {tokens.length
-          ? tokens.map((token) => {
-              const {
-                id,
-                name,
-                description,
-                image_thumbnail_url,
-                image_url,
-                permalink,
-                asset_contract,
-              } = token;
-              return (
-                <div
-                  key={id}
-                  className={`flex cursor-pointer flex-col rounded-lg border ${bgColor} bg-white shadow-md ${
-                    currentTheme === themeKeys.dark
-                      ? 'dark:hover:bg-gray-700'
-                      : 'hover:bg-gray-100'
-                  }  dark:border-gray-700  `}
-                  onClick={() => {
-                    toggleToken?.(token);
-                  }}
-                >
-                  {image_thumbnail_url || image_url ? (
-                    <div className='relative h-24 w-full rounded-t-lg md:h-48'>
-                      <Image
-                        className='rounded-t-lg md:h-48'
-                        src={`/api/imageProxy?url=${encodeURIComponent(
-                          image_thumbnail_url || image_url || ''
-                        )}`}
-                        alt={`Collection banner image for ${name}`}
-                        layout='fill'
-                        objectFit='cover'
-                      />
-                    </div>
-                  ) : null}
-                  <div className='flex flex-col justify-between p-4 leading-normal'>
-                    <UnderlineLink href={permalink} className='mb-2'>
-                      <h5
-                        className='text-lg font-bold tracking-tight'
-                        title={name || defaultTokenName}
-                      >
-                        {name || defaultTokenName}
-                      </h5>
-                    </UnderlineLink>
-
-                    <p
-                      className='font-normal text-gray-700 dark:text-gray-400'
-                      title={description || ''}
-                    >
-                      {description}
-                    </p>
-                  </div>
-                </div>
-              );
-            })
+          ? tokens.map((token) => <TokenCard token={token} key={token.id} />)
           : 'No tokens found'}
       </div>
     </section>

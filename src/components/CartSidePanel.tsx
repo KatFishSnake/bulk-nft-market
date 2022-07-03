@@ -1,6 +1,5 @@
 import clsx from 'clsx';
-import { useRef } from 'react';
-import ReactCanvasConfetti from 'react-canvas-confetti';
+import { useMemo } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { SidePane } from 'react-side-pane';
 
@@ -11,13 +10,14 @@ import Button from '@/components/Button';
 import Portal from '@/components/Portal';
 import { useThemeContext } from '@/components/ThemeContext';
 
-type ConfettiType = {
-  (options?: any): Promise<null> | null;
-  reset: any;
+type CollectionsWithTokensType = {
+  [key: string]: {
+    name: string;
+    tokens: Array<TokenType>;
+  };
 };
 
 const CartSidePanel = () => {
-  const refConfetti = useRef<(config: any) => void>();
   const { textColor, bgColor } = useThemeContext();
   const {
     tokens: selectedTokens,
@@ -26,50 +26,31 @@ const CartSidePanel = () => {
     closeCartPanel,
   }: Partial<StateType> = useStore();
 
+  const collectionsWithTokens = useMemo(
+    () =>
+      (selectedTokens || []).reduce(
+        (obj: CollectionsWithTokensType, token: TokenType) => {
+          const collectionSlug = token?.collection?.slug || 'others';
+          const collectionName = token?.collection?.name || 'Others';
+          if (obj[collectionSlug]) obj[collectionSlug].tokens.push(token);
+          else obj[collectionSlug] = { name: collectionName, tokens: [token] };
+          return obj;
+        },
+        {}
+      ),
+    [selectedTokens]
+  );
+
+  const collectionKeys = useMemo(
+    () => Object.keys(collectionsWithTokens),
+    [collectionsWithTokens]
+  );
+
   const handleCloseCartPanel = () => {
     closeCartPanel?.();
   };
 
-  // Lol
-  const getConfettiInstance = (confetti: (config: any) => void) => {
-    refConfetti.current = confetti;
-  };
-  const makeShot = (particleRatio: number, opts: object) => {
-    refConfetti.current &&
-      refConfetti.current({
-        ...opts,
-        origin: { y: 0.7 },
-        particleCount: Math.floor(200 * particleRatio),
-      });
-  };
-  const fire = () => {
-    makeShot(0.25, {
-      spread: 26,
-      startVelocity: 55,
-    });
-
-    makeShot(0.2, {
-      spread: 60,
-    });
-
-    makeShot(0.35, {
-      spread: 100,
-      decay: 0.91,
-      scalar: 0.8,
-    });
-
-    makeShot(0.1, {
-      spread: 120,
-      startVelocity: 25,
-      decay: 0.92,
-      scalar: 1.2,
-    });
-
-    makeShot(0.1, {
-      spread: 120,
-      startVelocity: 45,
-    });
-  };
+  // TODO need to improve the UX of the cart
 
   return (
     <Portal>
@@ -82,35 +63,39 @@ const CartSidePanel = () => {
         <>
           <div className='px-4 pt-6'>
             <h2>Shopping cart</h2>
-            <p>Bellow are the tokens you have selected for purchase.</p>
+            <div className='pt-5 text-gray-500'>
+              <p>
+                Bellow are the tokens you have selected for purchase, grouped by
+                collection
+              </p>
+            </div>
             <div className='mt-10'>
-              {selectedTokens?.map((token: TokenType) => (
-                <div key={token.id} className='mb-2 flex flex-row px-1 py-1'>
-                  <span className='grow'>
-                    {token.id} - {token.name || 'Ghost'}
-                  </span>
-                  <IoMdClose
-                    onClick={() => {
-                      removeToken?.(token.id);
-                    }}
-                  />
+              {collectionKeys.map((collectionKey) => (
+                <div key={collectionKey} className='mb-2 flex flex-col'>
+                  <strong className='mb-2 grow'>
+                    {collectionsWithTokens[collectionKey].name}
+                  </strong>
+                  {collectionsWithTokens[collectionKey].tokens.map(
+                    (token: TokenType) => (
+                      <div key={token.id} className='mb-2 flex flex-row'>
+                        <span className='grow'>
+                          {token.id} - {token.name || 'Ghost'}
+                        </span>
+                        <IoMdClose
+                          onClick={() => {
+                            removeToken?.(token.id);
+                          }}
+                        />
+                      </div>
+                    )
+                  )}
                 </div>
               ))}
             </div>
-            <div>
-              <Button variant='primary' onClick={fire}>
-                💸 Checkout 💸
-              </Button>
+            <div className='mt-8'>
+              <Button variant='primary'>💸 Checkout 💸</Button>
             </div>
           </div>
-          <ReactCanvasConfetti
-            style={{
-              position: 'fixed',
-              width: '100%',
-              zIndex: -1,
-            }}
-            refConfetti={getConfettiInstance as ConfettiType}
-          />
         </>
       </SidePane>
     </Portal>

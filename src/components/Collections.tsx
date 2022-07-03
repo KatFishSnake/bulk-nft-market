@@ -5,6 +5,7 @@ import useSWR from 'swr';
 
 import { themeKeys } from '@/lib/constants';
 import fetcher from '@/lib/fetcher';
+import { sortListBy } from '@/lib/helper';
 import type { CollectionType } from '@/lib/types';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
@@ -19,24 +20,20 @@ const Collections = () => {
   const { textColor, bgColor, currentTheme } = useThemeContext();
   const [collections, setCollections] = useState<Array<CollectionType>>([]);
   const { data, error } = useSWR<CollectionsResponseType>(
-    'https://testnets-api.opensea.io/api/v1/collections?offset=0&limit=300',
+    '/api/collections',
     fetcher
   );
 
   useEffect(() => {
     if (data?.collections) {
-      setCollections(
-        data.collections.sort((a, b) =>
-          (a?.name || '').localeCompare(b?.name || '')
-        )
-      );
+      setCollections(sortListBy(data.collections, 'name'));
     }
   }, [data?.collections]);
 
   const handleOnSearchChange = useCallback(
     (value: string) => {
       if (value === '') {
-        setCollections(data?.collections || []);
+        setCollections(sortListBy(data?.collections, 'name'));
         return;
       }
       setCollections(
@@ -58,14 +55,14 @@ const Collections = () => {
       <div className='layout pt-5'>
         <SearchInput onSearchChange={handleOnSearchChange} />
       </div>
-      <div className='layout grid grid-cols-1 gap-4 pt-5 pb-10 md:grid-cols-3 xl:grid-cols-4'>
+      <div className='layout grid grid-cols-1 gap-4 pt-5 pb-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4'>
         {collections?.length ? (
           collections.map(
             ({ slug, name, short_description, banner_image_url }) => (
               <UnstyledLink
                 key={slug}
                 href={`/collection/${slug}`}
-                className={`flex flex-col rounded-lg border ${bgColor} bg-white shadow-md ${
+                className={`flex flex-col rounded-lg border ${bgColor} shadow-md ${
                   currentTheme === themeKeys.dark
                     ? 'dark:hover:bg-gray-700'
                     : 'hover:bg-gray-100'
@@ -84,7 +81,7 @@ const Collections = () => {
                 ) : null}
                 <div className='flex flex-col justify-between p-4 leading-normal'>
                   <h5
-                    className='break-all text-lg font-bold tracking-tight'
+                    className='self-start break-all text-lg font-bold tracking-tight'
                     title={name || ''}
                   >
                     {name}

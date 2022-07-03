@@ -22,4 +22,8 @@ export type TokenType = {
   asset_contract: {
     address: string;
   };
+  collection?: {
+    slug: string;
+    name: string | null;
+  };
 };
