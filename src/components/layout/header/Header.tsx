@@ -1,20 +1,17 @@
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import { StateType, useStore } from '@/lib/store';
 
-import UnderlineLink from '@/components/links/UnderlineLink';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import { useThemeContext } from '@/components/ThemeContext';
 
 import ThemeToggle from './ThemeToggle';
-
-const links = [
-  { href: '/components', label: 'Components' },
-  { href: '/profile', label: 'Profile' },
-];
+import { WalletConnectButton } from './WalletConnectButton';
 
 const Header = () => {
+  const route = useRouter();
   const [localNumberOfSelectedTokens, setLocalNumberOfSelectedTokens] =
     useState(0);
   const { textColor, bgColor } = useThemeContext();
@@ -34,15 +31,11 @@ const Header = () => {
     <header className={clsx('sticky top-0 z-50', bgColor, textColor)}>
       <div className='layout flex h-14 items-center justify-between'>
         <UnstyledLink href='/' className='flex items-center font-bold'>
-          <span className='pr-2 text-2xl'>🍱</span>BNFT Marketplace
+          <span className='pr-2 text-2xl'>🍱</span>BNFT
         </UnstyledLink>
         <nav className='flex'>
           <ul className='flex items-center justify-between space-x-4'>
-            {links.map(({ href, label }) => (
-              <li key={`${href}${label}`}>
-                <UnderlineLink href={href}>{label}</UnderlineLink>
-              </li>
-            ))}
+            {route.pathname === '/' ? null : <WalletConnectButton />}
             <li key='open-cart-panel' onClick={handleOpenCartPanel}>
               <span className='cursor-pointer hover:underline'>
                 Cart

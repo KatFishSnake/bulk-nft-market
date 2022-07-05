@@ -1,3 +1,4 @@
+import { ThemeProvider as NextThemeProvider, useTheme } from 'next-themes';
 import { createContext, ReactNode, useContext, useMemo } from 'react';
 
 import { themeKeys } from '@/lib/constants';
@@ -22,7 +23,8 @@ ThemeContext.displayName = 'BNFT.ThemeContext';
 
 const THEME_LS_KEY = 'bnft-theme';
 
-export const ThemeProvider = ({ children }: PropsType) => {
+export const CustomThemeProvider = ({ children }: PropsType) => {
+  const { setTheme } = useTheme();
   const [currentTheme, setCurrentTheme] = useLocalStorage(
     THEME_LS_KEY,
     defaultContextValue.currentTheme
@@ -31,6 +33,12 @@ export const ThemeProvider = ({ children }: PropsType) => {
   const toggleTheme = () => {
     const themeKey =
       currentTheme === themeKeys.light ? themeKeys.dark : themeKeys.light;
+
+    // TODO eventually migrate onto this guy
+    // Set next-themes theme
+    setTheme(themeKey);
+
+    // Set internal custom context for theme
     setCurrentTheme(themeKey);
   };
 
@@ -51,5 +59,11 @@ export const ThemeProvider = ({ children }: PropsType) => {
     </ThemeContext.Provider>
   );
 };
+
+export const ThemeProvider = ({ children }: PropsType) => (
+  <NextThemeProvider defaultTheme='light'>
+    <CustomThemeProvider>{children}</CustomThemeProvider>
+  </NextThemeProvider>
+);
 
 export const useThemeContext = () => useContext(ThemeContext);

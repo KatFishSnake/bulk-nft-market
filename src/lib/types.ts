@@ -14,6 +14,7 @@ export type CollectionType = {
 
 export type TokenType = {
   id: string;
+  token_id: string;
   name: string | null;
   description: string | null;
   image_url: string | null;
@@ -21,6 +22,7 @@ export type TokenType = {
   permalink: string;
   asset_contract: {
     address: string;
+    schema_name: string;
   };
   collection?: {
     slug: string;

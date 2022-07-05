@@ -1,4 +1,5 @@
+// ! Must keep in sync with 'next-themes'
 export const themeKeys = {
-  light: 'LIGHT',
-  dark: 'DARK',
+  light: 'light',
+  dark: 'dark',
 };

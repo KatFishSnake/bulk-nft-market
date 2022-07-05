@@ -55,14 +55,14 @@ const TokenCard = ({ token }: PropsType) => {
       ) : null}
       <div className='flex flex-col justify-between p-4 leading-normal'>
         <div className='mb-2'>
-          {isSelected ? (
-            <IoMdCheckmarkCircle className='mr-2 inline text-xl text-primary-500' />
-          ) : null}
           <UnderlineLink href={permalink} className='mb-0 self-start'>
             <h5
               className='text-lg font-bold tracking-tight'
               title={name || defaultTokenName}
             >
+              {isSelected ? (
+                <IoMdCheckmarkCircle className='mr-2 inline text-xl text-primary-500' />
+              ) : null}
               {name || defaultTokenName}
             </h5>
           </UnderlineLink>

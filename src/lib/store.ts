@@ -81,7 +81,7 @@ export const initializeStore = (preloadedState = {}) =>
 
         resetCart: () => {
           set({
-            tokens: [getDefaultInitialState().tokens],
+            tokens: getDefaultInitialState().tokens,
           });
         },
       }),

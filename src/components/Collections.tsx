@@ -1,11 +1,10 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
-import useSWR from 'swr';
 
 import { themeKeys } from '@/lib/constants';
-import fetcher from '@/lib/fetcher';
 import { sortListBy } from '@/lib/helper';
+import useFetcher from '@/lib/hooks/useFetcher';
 import type { CollectionType } from '@/lib/types';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
@@ -19,10 +18,11 @@ type CollectionsResponseType = {
 const Collections = () => {
   const { textColor, bgColor, currentTheme } = useThemeContext();
   const [collections, setCollections] = useState<Array<CollectionType>>([]);
-  const { data, error } = useSWR<CollectionsResponseType>(
-    '/api/collections',
-    fetcher
-  );
+
+  // ! TODO this will sometimes will cycle through items as it is not ordered
+  // ! additionally we can load more items with offset and limit, ei. infinite scroll
+  const { data, error, loading } =
+    useFetcher<CollectionsResponseType>('/api/collections');
 
   useEffect(() => {
     if (data?.collections) {
@@ -56,7 +56,7 @@ const Collections = () => {
         <SearchInput onSearchChange={handleOnSearchChange} />
       </div>
       <div className='layout grid grid-cols-1 gap-4 pt-5 pb-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4'>
-        {collections?.length ? (
+        {!loading ? (
           collections.map(
             ({ slug, name, short_description, banner_image_url }) => (
               <UnstyledLink

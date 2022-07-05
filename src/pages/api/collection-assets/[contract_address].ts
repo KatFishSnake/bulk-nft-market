@@ -9,3 +9,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const body = await result.body;
   (body as any)?.pipe(res);
 };
+
+export const config = {
+  runtime: 'experimental-edge',
+};

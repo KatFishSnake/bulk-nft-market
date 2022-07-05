@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { SidePane } from 'react-side-pane';
 
+import { themeKeys } from '@/lib/constants';
 import { StateType, useStore } from '@/lib/store';
 import { TokenType } from '@/lib/types';
 
@@ -18,13 +19,19 @@ type CollectionsWithTokensType = {
 };
 
 const CartSidePanel = () => {
-  const { textColor, bgColor } = useThemeContext();
+  const { textColor, bgColor, currentTheme } = useThemeContext();
   const {
     tokens: selectedTokens,
     removeToken,
     isCartPanelOpen,
     closeCartPanel,
+    resetCart,
   }: Partial<StateType> = useStore();
+
+  const hasSelectedTokens = useMemo(
+    () => selectedTokens && selectedTokens.length > 0,
+    [selectedTokens]
+  );
 
   const collectionsWithTokens = useMemo(
     () =>
@@ -48,6 +55,10 @@ const CartSidePanel = () => {
 
   const handleCloseCartPanel = () => {
     closeCartPanel?.();
+  };
+
+  const handleCartClear = () => {
+    resetCart?.();
   };
 
   // TODO need to improve the UX of the cart
@@ -79,7 +90,7 @@ const CartSidePanel = () => {
                     (token: TokenType) => (
                       <div key={token.id} className='mb-2 flex flex-row'>
                         <span className='grow'>
-                          {token.id} - {token.name || 'Ghost'}
+                          {token.token_id} - {token.name || 'Ghost'}
                         </span>
                         <IoMdClose
                           onClick={() => {
@@ -93,7 +104,19 @@ const CartSidePanel = () => {
               ))}
             </div>
             <div className='mt-8'>
-              <Button variant='primary'>💸 Checkout 💸</Button>
+              <Button disabled variant='primary'>
+                💸 Checkout 💸
+              </Button>
+              {hasSelectedTokens ? (
+                <Button
+                  variant='ghost'
+                  className='ml-2'
+                  isDarkBg={currentTheme === themeKeys.dark}
+                  onClick={handleCartClear}
+                >
+                  Clear cart
+                </Button>
+              ) : null}
             </div>
           </div>
         </>

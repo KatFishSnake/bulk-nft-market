@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import useSWR from 'swr';
 
-import fetcher from '@/lib/fetcher';
 import { sortListBy } from '@/lib/helper';
+import useFetcher from '@/lib/hooks/useFetcher';
 import type { TokenType } from '@/lib/types';
 
 import SearchInput from '@/components/SearchInput';
@@ -20,9 +19,8 @@ const Tokens = ({ collectionContractAddress }: PropsType) => {
   const [tokens, setTokens] = useState<Array<TokenType>>([]);
 
   // TODO loads only 50 items, add pagination
-  const { data, error } = useSWR<TokensResponseType>(
-    `/api/collection-assets/${collectionContractAddress}?limit=50&order=desc`,
-    fetcher
+  const { data, error, loading } = useFetcher<TokensResponseType>(
+    `/api/collection-assets/${collectionContractAddress}?limit=50&order=desc`
   );
 
   useEffect(() => {
@@ -46,8 +44,13 @@ const Tokens = ({ collectionContractAddress }: PropsType) => {
     [data?.assets]
   );
 
-  if (error) return <div>Failed to load</div>;
-  if (!tokens) return <div>Loading...</div>;
+  if (error) return <div>Failed to load token list</div>;
+  if (loading)
+    return (
+      <div className='layout pt-5'>
+        <div>Loading...</div>
+      </div>
+    );
 
   return (
     <section>
