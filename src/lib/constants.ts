@@ -3,3 +3,5 @@ export const themeKeys = {
   light: 'light',
   dark: 'dark',
 };
+
+export const ghostName = 'Ghost';

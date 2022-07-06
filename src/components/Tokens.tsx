@@ -5,7 +5,7 @@ import useFetcher from '@/lib/hooks/useFetcher';
 import type { TokenType } from '@/lib/types';
 
 import SearchInput from '@/components/SearchInput';
-import TokenCard from '@/components/TokenCard';
+import TokenCard from '@/components/TokensCard';
 
 type PropsType = {
   collectionContractAddress: string;
@@ -62,7 +62,7 @@ const Tokens = ({ collectionContractAddress }: PropsType) => {
       </div>
       <div className='layout grid grid-cols-1 gap-4 pt-5 pb-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4'>
         {tokens.length
-          ? tokens.map((token) => <TokenCard token={token} key={token.id} />)
+          ? tokens.map((token) => <TokenCard key={token.id} token={token} />)
           : 'No tokens found'}
       </div>
     </section>

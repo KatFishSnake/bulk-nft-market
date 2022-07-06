@@ -13,7 +13,7 @@ import connectorTools from '@/lib/chainConnector';
 import { themeKeys } from '@/lib/constants';
 import { Provider as UIStateProvider, useCreateStore } from '@/lib/store';
 
-import CartSidePanel from '@/components/CartSidePanel';
+import CartSidePanel from '@/components/ShoppingCartSidePanel';
 import { ThemeProvider, useThemeContext } from '@/components/ThemeContext';
 
 function ThemedAppWrapper({ Component, pageProps }: AppProps) {

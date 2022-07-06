@@ -2,7 +2,7 @@ import Image from 'next/image';
 import React, { memo, useMemo } from 'react';
 import { IoMdCheckmarkCircle } from 'react-icons/io';
 
-import { themeKeys } from '@/lib/constants';
+import { ghostName, themeKeys } from '@/lib/constants';
 import { StateType, useStore } from '@/lib/store';
 import type { TokenType } from '@/lib/types';
 
@@ -13,9 +13,8 @@ type PropsType = {
   token: TokenType;
 };
 
-const defaultTokenName = 'Ghost';
-
-const TokenCard = ({ token }: PropsType) => {
+// TODO do not inject token here, use primitives
+const TokensCard = ({ token }: PropsType) => {
   const { tokens: selectedTokens, toggleToken }: Partial<StateType> =
     useStore();
   const { bgColor, currentTheme } = useThemeContext();
@@ -58,12 +57,12 @@ const TokenCard = ({ token }: PropsType) => {
           <UnderlineLink href={permalink} className='mb-0 self-start'>
             <h5
               className='text-lg font-bold tracking-tight'
-              title={name || defaultTokenName}
+              title={name || ghostName}
             >
               {isSelected ? (
                 <IoMdCheckmarkCircle className='mr-2 inline text-xl text-primary-500' />
               ) : null}
-              {name || defaultTokenName}
+              {name || ghostName}
             </h5>
           </UnderlineLink>
         </div>
@@ -79,4 +78,4 @@ const TokenCard = ({ token }: PropsType) => {
   );
 };
 
-export default memo(TokenCard);
+export default memo(TokensCard);
