@@ -26,6 +26,10 @@ module.exports = {
     },
   },
 
+  future: {
+    webpack5: true,
+  },
+
   // SVGR
   webpack(config) {
     config.module.rules.push({
@@ -41,6 +45,12 @@ module.exports = {
         },
       ],
     });
+
+    // ! https://github.com/ProjectOpenSea/opensea-js/issues/421
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+    };
 
     return config;
   },
