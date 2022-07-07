@@ -20,7 +20,7 @@ export class ThrottleError extends Error {
   }
 }
 
-const fetcher = async (url: RequestInfo, params?: RequestInit) => {
+export const fetcher = async (url: RequestInfo, params?: RequestInit) => {
   const res = await fetch(url, params);
   const resParsed = await res.json();
 

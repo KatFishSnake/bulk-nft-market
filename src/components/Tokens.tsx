@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { sortListBy } from '@/lib/helper';
-import useFetcher from '@/lib/hooks/useFetcher';
+import { fetcher } from '@/lib/hooks/useFetcher';
 import type { TokenType } from '@/lib/types';
 
 import SearchInput from '@/components/SearchInput';
 import TokenCard from '@/components/TokensCard';
+import useSWR from 'swr';
 
 type PropsType = {
   collectionContractAddress: string;
@@ -18,10 +19,27 @@ type TokensResponseType = {
 const Tokens = ({ collectionContractAddress }: PropsType) => {
   const [tokens, setTokens] = useState<Array<TokenType>>([]);
 
-  // TODO loads only 50 items, add pagination
-  const { data, error, loading } = useFetcher<TokensResponseType>(
-    `https://testnets-api.opensea.io/api/v1/assets?asset_contract_address=${collectionContractAddress}&order_direction=desc&offset=0&limit=50&include_orders=false`
+  const { data, error } = useSWR(
+    `https://testnets-api.opensea.io/api/v1/assets?asset_contract_address=${collectionContractAddress}&order_direction=desc&offset=0&limit=50&include_orders=false`,
+    fetcher
   );
+
+  // For debugging purposes, and future logging (sentry etc.)
+  useEffect(() => {
+    if (error) console.error(error);
+  }, [error]);
+
+  let localError = error;
+  const loading = useMemo(() => {
+    if (!data && !error) return true;
+
+    if (error?.isThrottled) {
+      localError = null;
+      return true;
+    }
+
+    return false;
+  }, [data, error]);
 
   useEffect(() => {
     if (data?.assets) {
