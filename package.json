@@ -67,6 +67,10 @@
     "typescript": "^4.7.4",
     "vitest": "^0.16.0"
   },
+  "resolutions": {
+    "wyvern-schemas": "github:ProjectOpenSea/wyvern-schemas#b829f3e93b0332f280f547875b31a9a3c7ae092a",
+    "@0x/utils": "https://github.com/ProjectOpensea/0x-tools/raw/provider-patch/utils/0x-utils-6.5.0.tgz"
+  },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": [
       "eslint",
