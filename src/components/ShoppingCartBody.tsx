@@ -29,9 +29,7 @@ const ShoppingCartBody = () => {
   const seaport = useMemo(() => {
     const web3Provider = signer?.provider as Web3Provider;
     if (!(web3Provider instanceof Web3Provider)) return null;
-    return web3Provider?.provider
-      ? new Seaport(web3Provider.provider as any)
-      : null;
+    return web3Provider?.provider ? new Seaport(web3Provider as any) : null;
   }, [signer, chain]);
 
   const hasSelectedTokens = useMemo(
