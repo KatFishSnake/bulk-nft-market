@@ -1,4 +1,6 @@
 import { IoMdClose } from 'react-icons/io';
+import { utils } from 'ethers';
+import { ItemType } from '@opensea/seaport-js/lib/constants';
 
 import { ghostName } from '@/lib/constants';
 import { StateType, useStore } from '@/lib/store';
@@ -28,19 +30,32 @@ const ShoppingCartBodyTokenItem = ({
 
   const handleBuyToken = async () => {
     if (!seaportProvider) return null;
-
-    // const order = await seaportProvider.createBuyOrder({
-    //   asset: {
-    //     tokenId,
-    //     tokenAddress,
-    //   },
-    //   accountAddress: walletAddress,
-    //   // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
-    //   startAmount: amount,
-    // });
-
-    console.log(seaportProvider);
-    // console.log(order);
+    const { executeAllActions } = await seaportProvider.createOrder(
+      {
+        offer: [
+          {
+            itemType: ItemType.ERC721,
+            token: tokenAddress,
+            identifier: tokenId,
+          },
+        ],
+        consideration: [
+          {
+            amount: utils.parseEther('0.000001').toString(),
+            recipient: walletAddress,
+          },
+        ],
+      },
+      walletAddress
+    );
+    const order = await executeAllActions();
+    const { executeAllActions: executeAllFulfillActions } =
+      await seaportProvider.fulfillOrder({
+        order,
+        accountAddress: walletAddress,
+      });
+    const transaction = await executeAllFulfillActions();
+    console.log(transaction);
   };
 
   const handleSetAmount = (e: React.ChangeEvent<HTMLInputElement>) => {

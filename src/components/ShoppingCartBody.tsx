@@ -1,7 +1,6 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useAccount, useNetwork, useSigner } from 'wagmi';
 import { Web3Provider } from '@ethersproject/providers';
-// import { OpenSeaPort, Network } from 'opensea-js';
 import { Seaport } from '@opensea/seaport-js';
 
 import { themeKeys } from '@/lib/constants';
@@ -29,7 +28,7 @@ const ShoppingCartBody = () => {
   const seaport = useMemo(() => {
     const web3Provider = signer?.provider as Web3Provider;
     if (!(web3Provider instanceof Web3Provider)) return null;
-    return web3Provider?.provider ? new Seaport(web3Provider as any) : null;
+    return web3Provider?.provider ? new Seaport(web3Provider) : null;
   }, [signer, chain]);
 
   const hasSelectedTokens = useMemo(
