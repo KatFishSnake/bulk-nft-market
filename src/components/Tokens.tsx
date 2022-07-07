@@ -20,7 +20,7 @@ const Tokens = ({ collectionContractAddress }: PropsType) => {
 
   // TODO loads only 50 items, add pagination
   const { data, error, loading } = useFetcher<TokensResponseType>(
-    `/api/collection-assets/${collectionContractAddress}?limit=50&order=desc`
+    `https://testnets-api.opensea.io/api/v1/assets?asset_contract_address=${collectionContractAddress}&order_direction=desc&offset=0&limit=50&include_orders=false`
   );
 
   useEffect(() => {
