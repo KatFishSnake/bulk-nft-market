@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useAccount, useNetwork, useSigner } from 'wagmi';
-import { Web3Provider } from '@ethersproject/providers';
-import { OpenSeaPort, Network } from 'opensea-js';
+// import { Web3Provider } from '@ethersproject/providers';
+// import { OpenSeaPort, Network } from 'opensea-js';
 
 import { themeKeys } from '@/lib/constants';
 import { StateType, useStore } from '@/lib/store';
@@ -25,15 +25,17 @@ const ShoppingCartBody = () => {
   const { currentTheme } = useThemeContext();
   const { tokens: selectedTokens, resetCart }: Partial<StateType> = useStore();
 
-  const seaport = useMemo(() => {
-    const web3Provider = signer?.provider as Web3Provider;
-    if (!(web3Provider instanceof Web3Provider)) return null;
-    return web3Provider?.provider
-      ? new OpenSeaPort(web3Provider.provider as any, {
-          networkName: (chain?.network as Network) || Network.Rinkeby,
-        })
-      : null;
-  }, [signer, chain]);
+  // const seaport = useMemo(() => {
+  //   const web3Provider = signer?.provider as Web3Provider;
+  //   if (!(web3Provider instanceof Web3Provider)) return null;
+  //   return web3Provider?.provider
+  //     ? new OpenSeaPort(web3Provider.provider as any, {
+  //         networkName: (chain?.network as Network) || Network.Rinkeby,
+  //       })
+  //     : null;
+  // }, [signer, chain]);
+
+  const seaport = null;
 
   const hasSelectedTokens = useMemo(
     () => selectedTokens && selectedTokens.length > 0,
