@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@ethersproject/providers": "^5.6.8",
-    "@opensea/seaport-js": "^1.0.2",
+    "@opensea/seaport-js": "https://github.com/ProjectOpenSea/seaport-js.git#robert/signer",
     "@rainbow-me/rainbowkit": "^0.4.1",
     "clsx": "^1.1.1",
     "ethers": "^5.6.9",

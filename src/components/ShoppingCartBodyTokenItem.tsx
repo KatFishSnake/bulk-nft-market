@@ -2,7 +2,7 @@ import { IoMdClose } from 'react-icons/io';
 
 import { ghostName } from '@/lib/constants';
 import { StateType, useStore } from '@/lib/store';
-import type { OpenSeaPort } from 'opensea-js';
+import type { Seaport } from '@opensea/seaport-js';
 import Button from '@/components/Button';
 import { useState } from 'react';
 
@@ -12,7 +12,7 @@ type PropsType = {
   tokenAddress: string;
   name: string | null;
   walletAddress: string;
-  seaportProvider: OpenSeaPort | null;
+  seaportProvider: Seaport | null;
 };
 
 const ShoppingCartBodyTokenItem = ({
@@ -29,17 +29,18 @@ const ShoppingCartBodyTokenItem = ({
   const handleBuyToken = async () => {
     if (!seaportProvider) return null;
 
-    const order = await seaportProvider.createBuyOrder({
-      asset: {
-        tokenId,
-        tokenAddress,
-      },
-      accountAddress: walletAddress,
-      // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
-      startAmount: amount,
-    });
+    // const order = await seaportProvider.createBuyOrder({
+    //   asset: {
+    //     tokenId,
+    //     tokenAddress,
+    //   },
+    //   accountAddress: walletAddress,
+    //   // Value of the offer, in units of the payment token (or wrapped ETH if none is specified):
+    //   startAmount: amount,
+    // });
 
-    console.log(order);
+    console.log(seaportProvider);
+    // console.log(order);
   };
 
   const handleSetAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
