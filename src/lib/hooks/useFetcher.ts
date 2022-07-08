@@ -61,15 +61,15 @@ const useFetcher = <T>(url: string) => {
 
   let localError = error;
   const loading = useMemo(() => {
-    if (!data && !error) return true;
+    if (!data && !localError) return true;
 
-    if (error?.isThrottled) {
+    if (localError?.isThrottled) {
       localError = null;
       return true;
     }
 
     return false;
-  }, [data, error]);
+  }, [data, localError]);
 
   return { loading, data, error: localError };
 };

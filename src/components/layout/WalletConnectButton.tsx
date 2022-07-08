@@ -1,4 +1,5 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Image from 'next/image';
 
 import Button from '@/components/Button';
 
@@ -65,13 +66,15 @@ export const WalletConnectButton = () => {
                           borderRadius: 999,
                           overflow: 'hidden',
                           marginRight: 4,
+                          display: 'flex',
                         }}
                       >
                         {chain.iconUrl && (
-                          <img
+                          <Image
                             alt={chain.name ?? 'Chain icon'}
                             src={chain.iconUrl}
-                            style={{ width: 12, height: 12 }}
+                            width={12}
+                            height={12}
                           />
                         )}
                       </div>

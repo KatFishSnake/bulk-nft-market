@@ -1,22 +1,22 @@
 import clsx from 'clsx';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import { skeletonCardsLoading } from '@/lib/constants';
 import { sortListBy } from '@/lib/helper';
 import useFetcher from '@/lib/hooks/useFetcher';
 import type { CollectionType } from '@/lib/types';
 
 import CollectionsCard from '@/components/CollectionsCard';
 import SearchInput from '@/components/SearchInput';
-import { useThemeContext } from '@/components/ThemeContext';
 import Skeleton from '@/components/Skeleton';
-import { skeletonCardsLoading } from '@/lib/constants';
+import { useThemeContext } from '@/components/ThemeContext';
 
 type CollectionsResponseType = {
   collections: Array<CollectionType>;
 };
 
 const Collections = () => {
-  const { textColor, bgColor, currentTheme } = useThemeContext();
+  const { textColor, bgColor } = useThemeContext();
   const [collections, setCollections] = useState<Array<CollectionType>>([]);
 
   // ! TODO this will sometimes will cycle through items as it is not ordered
@@ -36,8 +36,9 @@ const Collections = () => {
         setCollections(sortListBy(data?.collections, 'name'));
         return;
       }
-      setCollections(
-        collections.filter((collection) =>
+
+      setCollections((previousCollections) =>
+        previousCollections.filter((collection) =>
           collection.name
             ?.toLowerCase()
             .trim()

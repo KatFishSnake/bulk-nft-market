@@ -1,19 +1,19 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 
-import { StateType as UIStoreStateType, useUIStore } from '@/lib/store/uiStore';
+import useIsMounted from '@/lib/hooks/useIsMounted';
 import {
   StateType as CartStoreStateType,
   useCartStore,
 } from '@/lib/store/cartStore';
+import { StateType as UIStoreStateType, useUIStore } from '@/lib/store/uiStore';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
 import { useThemeContext } from '@/components/ThemeContext';
 
 import ThemeToggle from './ThemeToggle';
 import { WalletConnectButton } from './WalletConnectButton';
-import { useAccount } from 'wagmi';
-import useIsMounted from '@/lib/hooks/useIsMounted';
 
 const Header = () => {
   const isMounted = useIsMounted();

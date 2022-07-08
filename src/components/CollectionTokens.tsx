@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { skeletonCardsLoading } from '@/lib/constants';
 import { sortListBy } from '@/lib/helper';
 import useFetcher from '@/lib/hooks/useFetcher';
 import type { TokenType } from '@/lib/types';
 
-import SearchInput from '@/components/SearchInput';
 import TokenCard from '@/components/CollectionTokensCard';
-import { skeletonCardsLoading } from '@/lib/constants';
+import SearchInput from '@/components/SearchInput';
 import Skeleton from '@/components/Skeleton';
 
 type PropsType = {
@@ -37,8 +37,8 @@ const Tokens = ({ collectionContractAddress }: PropsType) => {
         setTokens(sortListBy(data?.assets, 'name'));
         return;
       }
-      setTokens(
-        [...tokens].filter((token) =>
+      setTokens((previousTokens) =>
+        [...previousTokens].filter((token) =>
           token.name?.toLowerCase().trim()?.includes(value.trim().toLowerCase())
         )
       );

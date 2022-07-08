@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { clsxm } from '@/lib/helper';
-import { useThemeContext } from '@/components/ThemeContext';
 import { themeKeys } from '@/lib/constants';
+import { clsxm } from '@/lib/helper';
+
+import { useThemeContext } from '@/components/ThemeContext';
 
 type SkeletonProps = React.ComponentPropsWithoutRef<'div'>;
 

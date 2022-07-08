@@ -21,7 +21,9 @@ const wagmiClient = createClient({
   provider,
 });
 
-export default {
+const chainConnector = {
   wagmiClient,
   chains,
 };
+
+export default chainConnector;

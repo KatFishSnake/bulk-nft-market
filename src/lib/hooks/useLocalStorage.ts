@@ -16,7 +16,7 @@ const useLocalStorage = (key: string, initialValue: any) => {
         return initialValue;
       }
     }
-  }, []);
+  }, [initialValue]);
 
   // Return a wrapped version of useState's setter function that ...
   // ... persists the new value to localStorage.

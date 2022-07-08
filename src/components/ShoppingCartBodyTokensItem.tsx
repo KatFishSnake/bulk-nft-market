@@ -1,13 +1,14 @@
+import type { OpenSeaPort } from 'opensea-js';
+import { memo, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 import { IoMdClose } from 'react-icons/io';
 
 import { ghostName, themeKeys } from '@/lib/constants';
 import { StateType, useCartStore } from '@/lib/store/cartStore';
-import type { OpenSeaPort } from 'opensea-js';
+
 import Button from '@/components/Button';
-import { memo, useRef, useState } from 'react';
-import { useThemeContext } from '@/components/ThemeContext';
-import toast from 'react-hot-toast';
 import UnstyledLink from '@/components/links/UnstyledLink';
+import { useThemeContext } from '@/components/ThemeContext';
 
 type PropsType = {
   id: string;

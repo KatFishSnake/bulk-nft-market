@@ -28,7 +28,7 @@ const SearchInput = ({ onSearchChange }: PropsType) => {
 
   useEffect(() => {
     onSearchChange(deferredQueryValue || '');
-  }, [deferredQueryValue]);
+  }, [deferredQueryValue, onSearchChange]);
 
   return (
     <form className='max-w-md'>

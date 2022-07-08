@@ -1,6 +1,6 @@
+import { OpenSeaPort } from 'opensea-js';
 import React, { useMemo } from 'react';
 import { useAccount } from 'wagmi';
-import { OpenSeaPort } from 'opensea-js';
 
 import { StateType, useCartStore } from '@/lib/store/cartStore';
 import { TokenType } from '@/lib/types';

@@ -1,6 +1,6 @@
+import Collection from '@/components/Collection';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
-import Collection from '@/components/Collection';
 
 const CollectionPage = () => {
   return (

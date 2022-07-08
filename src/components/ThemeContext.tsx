@@ -1,5 +1,11 @@
 import { ThemeProvider as NextThemeProvider, useTheme } from 'next-themes';
-import { createContext, ReactNode, useContext, useMemo } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+} from 'react';
 
 import { themeKeys } from '@/lib/constants';
 import useLocalStorage from '@/lib/hooks/useLocalStorage';
@@ -30,7 +36,7 @@ export const CustomThemeProvider = ({ children }: PropsType) => {
     defaultContextValue.currentTheme
   );
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     const themeKey =
       currentTheme === themeKeys.light ? themeKeys.dark : themeKeys.light;
 
@@ -40,7 +46,7 @@ export const CustomThemeProvider = ({ children }: PropsType) => {
 
     // Set internal custom context for theme
     setCurrentTheme(themeKey);
-  };
+  }, [currentTheme, setTheme, setCurrentTheme]);
 
   const contextValue = useMemo(
     () => ({

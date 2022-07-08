@@ -1,6 +1,7 @@
-import React, { memo, useMemo, useState } from 'react';
-import { useAccount } from 'wagmi';
+import type { OpenSeaPort } from 'opensea-js';
+import React, { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useAccount } from 'wagmi';
 
 import { themeKeys } from '@/lib/constants';
 import { StateType, useCartStore } from '@/lib/store/cartStore';
@@ -8,7 +9,6 @@ import { TokenType } from '@/lib/types';
 
 import Button from '@/components/Button';
 import { useThemeContext } from '@/components/ThemeContext';
-import type { OpenSeaPort } from 'opensea-js';
 
 export const defaultOfferOnAllAmount = '0.0001';
 

@@ -22,11 +22,13 @@ const TokensCard = ({ token }: PropsType) => {
   const { image_thumbnail_url, image_url, permalink, name, description } =
     token;
 
-  const isSelected = useMemo(() => {
-    return selectedTokens?.some(
-      (selectedToken: TokenType) => selectedToken.id === token.id
-    );
-  }, [selectedTokens]);
+  const isSelected = useMemo(
+    () =>
+      selectedTokens?.some(
+        (selectedToken: TokenType) => selectedToken.id === token.id
+      ),
+    [selectedTokens, token]
+  );
 
   const handleToggleToken = () => {
     toggleToken?.(token);

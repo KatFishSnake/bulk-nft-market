@@ -1,14 +1,15 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import clsx from 'clsx';
 import React from 'react';
+import { useAccount } from 'wagmi';
+
+import useIsMounted from '@/lib/hooks/useIsMounted';
 
 import Layout from '@/components/layout/Layout';
 import ArrowLink from '@/components/links/ArrowLink';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import Seo from '@/components/Seo';
 import { useThemeContext } from '@/components/ThemeContext';
-import { useAccount } from 'wagmi';
-import useIsMounted from '@/lib/hooks/useIsMounted';
 
 const HomePage = () => {
   const { textColor, bgColor } = useThemeContext();

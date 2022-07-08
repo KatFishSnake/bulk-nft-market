@@ -5,8 +5,8 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { AppProps } from 'next/app';
 import { useMemo } from 'react';
-import { WagmiConfig } from 'wagmi';
 import { Toaster } from 'react-hot-toast';
+import { WagmiConfig } from 'wagmi';
 
 import '@/styles/globals.css';
 
@@ -46,22 +46,20 @@ function ThemedAppWrapper({ Component, pageProps }: AppProps) {
       >
         <UIStateProvider createStore={createUIStore}>
           <CartStateProvider createStore={createCartStore}>
-            <ThemeProvider>
-              <Component {...pageProps} />
-              <CartSidePanel />
-              <Toaster
-                position='top-center'
-                toastOptions={{
-                  // Default options for toasts
-                  duration: 3000,
-                  style: {
-                    background:
-                      currentTheme === themeKeys.dark ? '#363636' : '#f6f7f8',
-                    color: currentTheme === themeKeys.dark ? '#fff' : '#000',
-                  },
-                }}
-              />
-            </ThemeProvider>
+            <Component {...pageProps} />
+            <CartSidePanel />
+            <Toaster
+              position='top-center'
+              toastOptions={{
+                // Default options for toasts
+                duration: 3000,
+                style: {
+                  background:
+                    currentTheme === themeKeys.dark ? '#363636' : '#f6f7f8',
+                  color: currentTheme === themeKeys.dark ? '#fff' : '#000',
+                },
+              }}
+            />
           </CartStateProvider>
         </UIStateProvider>
       </RainbowKitProvider>

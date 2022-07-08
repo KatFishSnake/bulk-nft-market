@@ -5,11 +5,11 @@ import { BiArrowBack } from 'react-icons/bi';
 import useFetcher from '@/lib/hooks/useFetcher';
 import type { CollectionType } from '@/lib/types';
 
+import Tokens from '@/components/CollectionTokens';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import NextImage from '@/components/NextImage';
-import { useThemeContext } from '@/components/ThemeContext';
-import Tokens from '@/components/CollectionTokens';
 import Skeleton from '@/components/Skeleton';
+import { useThemeContext } from '@/components/ThemeContext';
 
 type CollectionsResponseType = { collection: CollectionType };
 
