@@ -1,3 +1,6 @@
+import clsx, { ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
 type OpenGraphType = {
   siteName: string;
   description: string;
@@ -35,3 +38,6 @@ export function openGraph({
 
 export const sortListBy = (list: Array<any> = [], key: string) =>
   list.sort((a, b) => (a?.[key] || '').localeCompare(b?.[key] || ''));
+
+/** Merge classes with tailwind-merge with clsx full feature */
+export const clsxm = (...classes: ClassValue[]) => twMerge(clsx(...classes));

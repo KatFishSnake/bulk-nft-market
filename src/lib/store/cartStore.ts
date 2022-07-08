@@ -25,9 +25,6 @@ const alreadyHasToken = (tokenId: string, tokens: Array<TokenType>) => {
 
 const getDefaultInitialState = () => ({
   tokens: [],
-  isCartPanelOpen: false,
-  openCartPanel: () => {},
-  closeCartPanel: () => {},
   addToken: (token: TokenType) => {},
   removeToken: (tokenId: string) => {},
   toggleToken: (token: TokenType) => {},
@@ -72,13 +69,6 @@ export const initializeStore = (preloadedState = {}) =>
           }
         },
 
-        openCartPanel: () => {
-          set({ isCartPanelOpen: true });
-        },
-        closeCartPanel: () => {
-          set({ isCartPanelOpen: false });
-        },
-
         resetCart: () => {
           set({
             tokens: getDefaultInitialState().tokens,
@@ -88,7 +78,7 @@ export const initializeStore = (preloadedState = {}) =>
 
       // TODO should really split this onto 2 stores, and persist only the selected tokens
       {
-        name: 'ui-store', // unique name
+        name: 'cart-store', // unique name
         getStorage: () =>
           typeof window !== 'undefined' ? window.localStorage : dummyStorageApi,
       }
@@ -96,7 +86,7 @@ export const initializeStore = (preloadedState = {}) =>
   );
 
 let store: any;
-export const useCreateStore = (serverInitialState: StateType) => {
+export const useCreateCartStore = (serverInitialState: StateType) => {
   // For SSR & SSG, always use a new store.
   if (typeof window === 'undefined') {
     return () => initializeStore(serverInitialState);
@@ -133,4 +123,4 @@ export const useCreateStore = (serverInitialState: StateType) => {
 const zustandContext = createContext<UseStoreStateType>();
 
 export const Provider = zustandContext.Provider;
-export const useStore = zustandContext.useStore;
+export const useCartStore = zustandContext.useStore;

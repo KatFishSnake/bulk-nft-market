@@ -43,7 +43,7 @@
     "prefix": "rcp",
     "body": [
       "import * as React from 'react';\n",
-      "import clsxm from '@/lib/clsxm';\n",
+      "import {clsxm} from '@/lib/helper';\n",
       "type ${1:${TM_FILENAME_BASE}}Props= {\n",
       "} & React.ComponentPropsWithoutRef<'div'>\n",
       "export default function ${1:${TM_FILENAME_BASE}}({className, ...rest}: ${1:${TM_FILENAME_BASE}}Props) {",

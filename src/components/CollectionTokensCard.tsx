@@ -3,7 +3,7 @@ import React, { memo, useMemo } from 'react';
 import { IoMdCheckmarkCircle } from 'react-icons/io';
 
 import { ghostName, themeKeys } from '@/lib/constants';
-import { StateType, useStore } from '@/lib/store';
+import { StateType, useCartStore } from '@/lib/store/cartStore';
 import type { TokenType } from '@/lib/types';
 
 import UnderlineLink from '@/components/links/UnderlineLink';
@@ -16,7 +16,7 @@ type PropsType = {
 // TODO do not inject token here, use primitives
 const TokensCard = ({ token }: PropsType) => {
   const { tokens: selectedTokens, toggleToken }: Partial<StateType> =
-    useStore();
+    useCartStore();
   const { bgColor, currentTheme } = useThemeContext();
 
   const { image_thumbnail_url, image_url, permalink, name, description } =
@@ -28,6 +28,10 @@ const TokensCard = ({ token }: PropsType) => {
     );
   }, [selectedTokens]);
 
+  const handleToggleToken = () => {
+    toggleToken?.(token);
+  };
+
   return (
     <div
       className={`flex cursor-pointer flex-col rounded-lg border ${bgColor} shadow-md ${
@@ -35,9 +39,9 @@ const TokensCard = ({ token }: PropsType) => {
           ? 'dark:hover:bg-gray-700'
           : 'hover:bg-gray-100'
       }  dark:border-gray-700  `}
-      onClick={() => {
-        toggleToken?.(token);
-      }}
+      onClick={handleToggleToken}
+      onKeyDown={handleToggleToken}
+      tabIndex={0}
     >
       {image_thumbnail_url || image_url ? (
         <div className='relative h-24 w-full rounded-t-lg md:h-48'>
@@ -68,7 +72,7 @@ const TokensCard = ({ token }: PropsType) => {
         </div>
 
         <p
-          className='font-normal text-gray-700 dark:text-gray-400'
+          className='font-normal text-gray-700 line-clamp-2 dark:text-gray-400'
           title={description || ''}
         >
           {description}

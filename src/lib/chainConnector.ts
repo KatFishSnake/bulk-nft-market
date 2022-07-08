@@ -6,7 +6,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import '@rainbow-me/rainbowkit/styles.css';
 
 const { chains, provider } = configureChains(
-  [chain.mainnet, chain.rinkeby],
+  [chain.rinkeby, chain.mainnet],
   [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }), publicProvider()]
 );
 

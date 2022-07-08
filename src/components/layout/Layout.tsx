@@ -1,9 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 
 import Footer from '@/components/layout/Footer';
-import Header from '@/components/layout/header/Header';
+import Header from '@/components/layout/Header';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+type PropsType = { children: React.ReactNode };
+
+const Layout = ({ children }: PropsType) => {
   return (
     <div className='flex min-h-screen flex-col'>
       <Header />
@@ -11,4 +13,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Footer />
     </div>
   );
-}
+};
+
+export default Layout;

@@ -6,18 +6,27 @@ import {
 import { AppProps } from 'next/app';
 import { useMemo } from 'react';
 import { WagmiConfig } from 'wagmi';
+import { Toaster } from 'react-hot-toast';
 
 import '@/styles/globals.css';
 
 import connectorTools from '@/lib/chainConnector';
 import { themeKeys } from '@/lib/constants';
-import { Provider as UIStateProvider, useCreateStore } from '@/lib/store';
+import {
+  Provider as CartStateProvider,
+  useCreateCartStore,
+} from '@/lib/store/cartStore';
+import {
+  Provider as UIStateProvider,
+  useCreateUIStore,
+} from '@/lib/store/uiStore';
 
-import CartSidePanel from '@/components/ShoppingCartSidePanel';
+import CartSidePanel from '@/components/ShoppingCart';
 import { ThemeProvider, useThemeContext } from '@/components/ThemeContext';
 
 function ThemedAppWrapper({ Component, pageProps }: AppProps) {
-  const createStore = useCreateStore(pageProps.initialZustandState);
+  const createCartStore = useCreateCartStore(pageProps.initialZustandState);
+  const createUIStore = useCreateUIStore(pageProps.initialZustandState);
   const { currentTheme } = useThemeContext();
 
   // TODO ideally would respond to theme changes, needs to be reloaded right now
@@ -35,11 +44,25 @@ function ThemedAppWrapper({ Component, pageProps }: AppProps) {
         chains={connectorTools.chains}
         theme={rainbowKitTheme}
       >
-        <UIStateProvider createStore={createStore}>
-          <ThemeProvider>
-            <Component {...pageProps} />
-            <CartSidePanel />
-          </ThemeProvider>
+        <UIStateProvider createStore={createUIStore}>
+          <CartStateProvider createStore={createCartStore}>
+            <ThemeProvider>
+              <Component {...pageProps} />
+              <CartSidePanel />
+              <Toaster
+                position='top-center'
+                toastOptions={{
+                  // Default options for toasts
+                  duration: 3000,
+                  style: {
+                    background:
+                      currentTheme === themeKeys.dark ? '#363636' : '#f6f7f8',
+                    color: currentTheme === themeKeys.dark ? '#fff' : '#000',
+                  },
+                }}
+              />
+            </ThemeProvider>
+          </CartStateProvider>
         </UIStateProvider>
       </RainbowKitProvider>
     </WagmiConfig>

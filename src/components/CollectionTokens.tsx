@@ -5,7 +5,9 @@ import useFetcher from '@/lib/hooks/useFetcher';
 import type { TokenType } from '@/lib/types';
 
 import SearchInput from '@/components/SearchInput';
-import TokenCard from '@/components/TokensCard';
+import TokenCard from '@/components/CollectionTokensCard';
+import { skeletonCardsLoading } from '@/lib/constants';
+import Skeleton from '@/components/Skeleton';
 
 type PropsType = {
   collectionContractAddress: string;
@@ -47,8 +49,10 @@ const Tokens = ({ collectionContractAddress }: PropsType) => {
   if (error) return <div>Failed to load token list</div>;
   if (loading)
     return (
-      <div className='layout pt-5'>
-        <div>Loading...</div>
+      <div className='layout grid grid-cols-1 gap-4 pt-5 pt-5 pb-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4'>
+        {skeletonCardsLoading.map((index: number) => (
+          <Skeleton key={index} className='h-40 rounded-lg shadow-md' />
+        ))}
       </div>
     );
 

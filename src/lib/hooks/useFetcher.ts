@@ -47,9 +47,11 @@ const fetcher = async (url: RequestInfo, params?: RequestInit) => {
 // TODO the fetches are a bit too heavy returning all the data for each token / collection.
 // Need to refactor to graphql for better performance.
 
-export default function useFetcher<T>(url: string) {
+const useFetcher = <T>(url: string) => {
   const { data, error } = useSWR<T>(`${getSiteUrl()}${url}`, {
     fetcher,
+    // Flickers the UI on basic page focus loss, not good, need to figure how how to make better
+    revalidateOnFocus: false,
   });
 
   // For debugging purposes, and future logging (sentry etc.)
@@ -70,4 +72,6 @@ export default function useFetcher<T>(url: string) {
   }, [data, error]);
 
   return { loading, data, error: localError };
-}
+};
+
+export default useFetcher;

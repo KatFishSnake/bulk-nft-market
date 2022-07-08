@@ -1,29 +1,17 @@
-import { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useAccount, useNetwork, useSigner } from 'wagmi';
 import { Web3Provider } from '@ethersproject/providers';
 import { OpenSeaPort, Network } from 'opensea-js';
 
-import { themeKeys } from '@/lib/constants';
-import { StateType, useStore } from '@/lib/store';
-import { TokenType } from '@/lib/types';
+import ShoppingCartBodyControls from '@/components/ShoppingCartBodyControls';
+import ShoppingCartBodyTokens from '@/components/ShoppingCartBodyTokens';
 
-import Button from '@/components/Button';
-import ShoppingCartBodyTokenItem from '@/components/ShoppingCartBodyTokenItem';
-import { useThemeContext } from '@/components/ThemeContext';
-
-type CollectionsWithTokensType = {
-  [key: string]: {
-    name: string;
-    tokens: Array<TokenType>;
-  };
-};
+export const defaultOfferOnAllAmount = '0.0001';
 
 const ShoppingCartBody = () => {
-  const { isConnected, address } = useAccount();
+  const { isConnected } = useAccount();
   const { data: signer } = useSigner();
   const { chain } = useNetwork();
-  const { currentTheme } = useThemeContext();
-  const { tokens: selectedTokens, resetCart }: Partial<StateType> = useStore();
 
   const seaport = useMemo(() => {
     const web3Provider = signer?.provider as Web3Provider;
@@ -35,39 +23,8 @@ const ShoppingCartBody = () => {
       : null;
   }, [signer, chain]);
 
-  const hasSelectedTokens = useMemo(
-    () => selectedTokens && selectedTokens.length > 0,
-    [selectedTokens]
-  );
-
-  const collectionsWithTokens = useMemo(
-    () =>
-      (selectedTokens || []).reduce(
-        (obj: CollectionsWithTokensType, token: TokenType) => {
-          const collectionSlug = token?.collection?.slug || 'others';
-          const collectionName = token?.collection?.name || 'Others';
-          if (obj[collectionSlug]) obj[collectionSlug].tokens.push(token);
-          else obj[collectionSlug] = { name: collectionName, tokens: [token] };
-          return obj;
-        },
-        {}
-      ),
-    [selectedTokens]
-  );
-
-  const collectionKeys = useMemo(
-    () => Object.keys(collectionsWithTokens),
-    [collectionsWithTokens]
-  );
-
-  const handleCartClear = () => {
-    resetCart?.();
-  };
-
-  // TODO need to improve the UX of the cart
-
   return (
-    <div className='px-4 pt-6'>
+    <div className='h-full overflow-scroll px-4 pt-6 pb-10'>
       <h2>Shopping cart</h2>
       {isConnected ? (
         <>
@@ -77,43 +34,11 @@ const ShoppingCartBody = () => {
               collection
             </p>
           </div>
-          <div className='mt-10'>
-            {collectionKeys.map((collectionKey) => (
-              <div key={collectionKey} className='mb-2 flex flex-col'>
-                <strong className='mb-2 grow'>
-                  {collectionsWithTokens[collectionKey].name}
-                </strong>
-                {collectionsWithTokens[collectionKey].tokens.map(
-                  ({ id, token_id, asset_contract, name }: TokenType) => (
-                    <ShoppingCartBodyTokenItem
-                      key={id}
-                      id={id}
-                      tokenId={token_id}
-                      tokenAddress={asset_contract.address}
-                      // We can guarantee when this ui is shown address is defined
-                      walletAddress={address as string}
-                      name={name}
-                      seaportProvider={seaport}
-                    />
-                  )
-                )}
-              </div>
-            ))}
-          </div>
-          <div className='mt-8'>
-            {hasSelectedTokens ? (
-              <Button
-                variant='ghost'
-                isDarkBg={currentTheme === themeKeys.dark}
-                onClick={handleCartClear}
-              >
-                Clear cart
-              </Button>
-            ) : null}
-          </div>
+          <ShoppingCartBodyTokens seaportProvider={seaport} />
+          <ShoppingCartBodyControls seaportProvider={seaport} />
         </>
       ) : (
-        <p>Please connect your wallet</p>
+        <p className='mt-4'>Please connect your wallet</p>
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { sortListBy } from '@/lib/helper';
 import useFetcher from '@/lib/hooks/useFetcher';
@@ -8,6 +8,8 @@ import type { CollectionType } from '@/lib/types';
 import CollectionsCard from '@/components/CollectionsCard';
 import SearchInput from '@/components/SearchInput';
 import { useThemeContext } from '@/components/ThemeContext';
+import Skeleton from '@/components/Skeleton';
+import { skeletonCardsLoading } from '@/lib/constants';
 
 type CollectionsResponseType = {
   collections: Array<CollectionType>;
@@ -54,21 +56,21 @@ const Collections = () => {
         <SearchInput onSearchChange={handleOnSearchChange} />
       </div>
       <div className='layout grid grid-cols-1 gap-4 pt-5 pb-10 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4'>
-        {!loading ? (
-          collections.map(
-            ({ slug, name, short_description, banner_image_url }) => (
-              <CollectionsCard
-                key={slug}
-                slug={slug}
-                name={name}
-                shortDescription={short_description}
-                imageUrl={banner_image_url}
-              />
+        {!loading
+          ? collections.map(
+              ({ slug, name, short_description, banner_image_url }) => (
+                <CollectionsCard
+                  key={slug}
+                  slug={slug}
+                  name={name}
+                  shortDescription={short_description}
+                  imageUrl={banner_image_url}
+                />
+              )
             )
-          )
-        ) : (
-          <p>Loading...</p>
-        )}
+          : skeletonCardsLoading.map((index: number) => (
+              <Skeleton key={index} className='h-40 rounded-lg shadow-md' />
+            ))}
       </div>
     </main>
   );

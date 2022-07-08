@@ -1,15 +1,19 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import clsx from 'clsx';
-import * as React from 'react';
+import React from 'react';
 
 import Layout from '@/components/layout/Layout';
 import ArrowLink from '@/components/links/ArrowLink';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import Seo from '@/components/Seo';
 import { useThemeContext } from '@/components/ThemeContext';
+import { useAccount } from 'wagmi';
+import useIsMounted from '@/lib/hooks/useIsMounted';
 
-export default function HomePage() {
+const HomePage = () => {
   const { textColor, bgColor } = useThemeContext();
+  const isMounted = useIsMounted();
+  const { isConnected } = useAccount();
 
   return (
     <Layout>
@@ -22,22 +26,31 @@ export default function HomePage() {
         )}
       >
         <section className='max-w-md'>
-          Welcome to BNFT app, currently you are able to select NFTs for a
-          collection, add them to the shopping cart and pretty much it 😝
+          <h1 className='mb-3 text-3xl'>Welcome to BNFT app</h1>
+          <ul>
+            <li>➊ Connect your wallet</li>
+            <li>➋ Select a token for a collection</li>
+            <li>➌ Add it to your shopping cart</li>
+            <li>➍ Bulk or individually buy selected tokens</li>
+          </ul>
+          <div className='mt-4 text-center'></div>
           <div className='mt-4 text-center'>
-            <ConnectButton />
-          </div>
-          <div className='mt-4 text-center'>
-            <ArrowLink
-              as={UnstyledLink}
-              className='inline-flex items-center text-primary-500'
-              href='/collections'
-            >
-              Proceed to collections
-            </ArrowLink>
+            {isMounted() && isConnected ? (
+              <ArrowLink
+                as={UnstyledLink}
+                className='inline-flex items-center text-primary-500'
+                href='/collections'
+              >
+                Proceed to collections
+              </ArrowLink>
+            ) : (
+              <ConnectButton />
+            )}
           </div>
         </section>
       </main>
     </Layout>
   );
-}
+};
+
+export default HomePage;

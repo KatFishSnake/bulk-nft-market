@@ -5,3 +5,5 @@ export const themeKeys = {
 };
 
 export const ghostName = 'Ghost';
+
+export const skeletonCardsLoading = Array.from(Array(10).keys());

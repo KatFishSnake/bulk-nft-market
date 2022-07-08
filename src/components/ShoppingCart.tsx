@@ -1,15 +1,15 @@
 import clsx from 'clsx';
 import { SidePane } from 'react-side-pane';
 
-import { StateType, useStore } from '@/lib/store';
+import { StateType, useUIStore } from '@/lib/store/uiStore';
 
 import Portal from '@/components/Portal';
 import ShoppingCartBody from '@/components/ShoppingCartBody';
 import { useThemeContext } from '@/components/ThemeContext';
 
-const ShoppingCartSidePanel = () => {
+const ShoppingCart = () => {
   const { textColor, bgColor } = useThemeContext();
-  const { isCartPanelOpen, closeCartPanel }: Partial<StateType> = useStore();
+  const { isCartPanelOpen, closeCartPanel }: Partial<StateType> = useUIStore();
 
   const handleCloseCartPanel = () => {
     closeCartPanel?.();
@@ -29,4 +29,4 @@ const ShoppingCartSidePanel = () => {
   );
 };
 
-export default ShoppingCartSidePanel;
+export default ShoppingCart;

@@ -29,6 +29,7 @@ const CollectionsCard = ({
           ? 'dark:hover:bg-gray-700'
           : 'hover:bg-gray-100'
       }  dark:border-gray-700  `}
+      tabIndex={0}
     >
       {imageUrl ? (
         <div className='relative h-24 w-full rounded-t-lg md:h-48'>
